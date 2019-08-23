@@ -1,0 +1,16 @@
+{
+  "name": "ADMIN-CMDB",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/adminintec/ADMIN-CMDB.git",
+  "author": "JT and LUIS",
+  "license": "no",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "clear": "^0.1.0",
+    "inquirer": "^6.5.1",
+    "inquirer-menu": "^1.0.0",
+    "lodash": "^4.17.15",
+    "log-update": "^3.2.0"
+  }
+}
