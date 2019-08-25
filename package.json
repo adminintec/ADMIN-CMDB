@@ -12,6 +12,7 @@
     "inquirer": "^6.5.1",
     "inquirer-menu": "^1.0.0",
     "lodash": "^4.17.15",
-    "log-update": "^3.2.0"
+    "log-update": "^3.2.0",
+    "read-data": "^1.1.0"
   }
 }
