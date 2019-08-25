@@ -110,10 +110,29 @@ const upgradeVersion = (objValues) => {
       |__UPDATED VERSION ${objItem.version} TO ${newVersionNumber}
     `);
   }
-  // setTimeout(() => {
-  //   initialMenu(handleCreateCI, handleUpgradeCI, null, handleListAll);
-  // }, 4000);
+}
+const getCIWithDependencies = idConfItem => {
+  const data = getUpdatedData();
+  const confItems = Object.values(data)
+  const CIdependencies = confItems.filter(items => {
+    const dependenciesInCI = items.dependencies;
+    const isDependencies =  dependenciesInCI.filter(i => i === idConfItem[0])
 
+    return isDependencies.length > 0
+  })
+  return CIdependencies 
+}
+
+const deprecateCI = (idConfItem) => {
+  const dependenciesWithConflictIfIsDeprecated = getCIWithDependencies(idConfItem)
+  dependenciesWithConflictIfIsDeprecated.forEach(item => {
+    console.log(`
+     This CI will be affected of ${item.name}:
+      |
+      |__With the  version ${item.version}
+    `)
+  })
+  
 }
 
 
@@ -133,13 +152,13 @@ const handleCreateCI = () => {
         const dependenciesParsed = dependenciesForConfigurationItem.map(v => parseInt(v))
         createInDatabase({ ...values, dependenciesSelected: dependenciesParsed, dependenciesName })
         setTimeout(() => {
-          initialMenu(handleCreateCI, handleUpgradeCI, null, handleListAll);
+          initialMenu(handleCreateCI, handleUpgradeCI, handleDeprecateCI, handleListAll);
         }, 3000);
       })
     } else {
       createInDatabase({ ...values })
       setTimeout(() => {
-        initialMenu(handleCreateCI, handleUpgradeCI, null, handleListAll);
+        initialMenu(handleCreateCI, handleUpgradeCI, handleDeprecateCI, handleListAll);
       }, 3000);
     }
 
@@ -161,7 +180,7 @@ const handleListAll = () => {
     `);
     return dt
   })
-  initialMenu(handleCreateCI, handleUpgradeCI, null, handleListAll);
+  initialMenu(handleCreateCI, handleUpgradeCI, handleDeprecateCI, handleListAll);
 };
 
 const handleUpgradeCI = () => {
@@ -179,14 +198,27 @@ const handleUpgradeCI = () => {
         typeVersion: typeVersion
       })
       setTimeout(() => {
-        initialMenu(handleCreateCI, handleUpgradeCI, null, handleListAll);
+        initialMenu(handleCreateCI, handleUpgradeCI, handleDeprecateCI, handleListAll);
       }, 3000);
     })
 
   })
 };
 
+const handleDeprecateCI = () => {
+  const data = getUpdatedData()
+  askToSelectOneDependencies(data).then(valuesDependenciesSelected => {
+    const { dependenciesSelected } = valuesDependenciesSelected;
+    const dependenciesSelectedToModify = dependenciesSelected.match(/\d+/g)
+    const dependenciesSelectedParsed = dependenciesSelectedToModify.map(v => parseInt(v))
+    console.log(dependenciesSelectedParsed)
+    deprecateCI(dependenciesSelectedParsed)
+    setTimeout(() => {
+      initialMenu(handleCreateCI, handleUpgradeCI, handleDeprecateCI, handleListAll);
+    }, 3500);
+  })
+}
 
 // TODO: Simulate deprecate
-initialMenu(handleCreateCI, handleUpgradeCI, null, handleListAll);
+initialMenu(handleCreateCI, handleUpgradeCI, handleDeprecateCI, handleListAll);
 
