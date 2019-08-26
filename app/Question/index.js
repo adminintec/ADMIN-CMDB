@@ -1,15 +1,15 @@
-const inquirer = require("inquirer");
-const utils = require('../Utils');
+const inquirer = require('inquirer');
+const clear = require('clear');
 
-const { isValidVersionFormat } = utils;
+const { isValidVersionFormat, getUpdatedData } = require("../Utils");
 
-const askConfigurationItem = () => {
-const question = [
-
+const askConfigurationDetail = () => {
+  const questions = [
+    /* Pass your questions in here */
     {
-      name: "name",
-      type: "input",
-      message: "What's the name of the Configuration Item?",
+      name: 'name',
+      type: 'input',
+      message: 'Enter the name of the configuration item.',
       validate: (value) => {
         if (!value) {
           return 'Enter a valid value.';
@@ -18,9 +18,9 @@ const question = [
       }
     },
     {
-      name: "description",
-      type: "input",
-      message: "What's the description of this CI?",
+      name: 'description',
+      type: 'input',
+      message: 'Enter the description of the configuration item.',
       validate: (value) => {
         if (!value) {
           return 'Enter a valid value.';
@@ -29,66 +29,91 @@ const question = [
       }
     },
     {
-      name: "version",
-      type: "input",
-      message: "What's the current version?",
+      name: 'version',
+      type: 'input',
+      message: 'Enter the version of the configuration item.',
       validate: (value) => {
-        if(isValidVersionFormat(value)){
+        if (isValidVersionFormat(value)) {
+          return true;
+        } else {
+          return "Please enter a valid version format #.#.#";
+        }
+      },
+    },
+    {
+      name: 'dependencies',
+      type: 'confirm',
+      message: 'Add dependencies?',
+    },
+  ];
+  clear();
+  return inquirer.prompt(questions);
+};
+
+const askDependencies = (data) => {
+  const choicesDependencies = Object.values(data).map((dt, index) => {
+    return `${index} ${dt.name}`
+  })
+  const questions = [
+    /* Pass your questions in here */
+    {
+      name: 'dependenciesSelected',
+      type: 'checkbox',
+      message: 'Select dependencies',
+      choices: choicesDependencies,
+
+    },
+  ];
+  clear();
+  return inquirer.prompt(questions);
+}
+
+const askToSelectOneDependencies = (data) => {
+  const choicesDependencies = Object.values(data).map((dt, index) => {
+    return `${index} ${dt.name}`
+  })
+  const questions = [
+    /* Pass your questions in here */
+    {
+      name: 'dependenciesSelected',
+      type: 'list',
+      message: 'Select what dependencies you want to work with?',
+      choices: choicesDependencies,
+
+    },
+  ];
+  return inquirer.prompt(questions);
+}
+
+const askWhatTypeOfVersionWant = () => {
+  const versionUpdateType = ["Major", "Minor", "Patch"]
+  const questions = [
+    /* Pass your questions in here */
+    {
+      name: 'typeVersion',
+      type: 'list',
+      message: 'Select what type of version you want?',
+      choices: versionUpdateType,
+    },
+    {
+      name: 'numberVersion',
+      type: 'input',
+      message: 'What is the number of the new version?',
+      validate: (value) => {
+        if (value.match(/[0-9]/)) {
           return true;
         }
-        return "Please enter a valid version format #.#.#";
+        return 'Enter a numer'
       }
     },
-]
-
-return inquirer.prompt(question)
-
+  ];
+  return inquirer.prompt(questions);
 }
 
-
-const manageConfigurationItem = () => {
-    const question = [
-        {
-          name: "name",
-          type: "input",
-          message: "What Configuration Item do you want to upgrade?",
-          validate: (value) => {
-            if (!value) {
-              return 'Enter a valid value.';
-            }
-            return true;
-          }
-        },
-        {
-          name: "type",
-          type: "input",
-          message: "What's the type of upgrade (Major *.0.0, Minor 0.*.0 or Patch 0.0.*?",
-          validate: (value) => {
-            if (!value) {
-              return 'Enter a valid value.';
-            }
-            return true;
-          }
-        },
-        {
-          name: "version",
-          type: "input",
-          message: "What's the current version?",
-          validate: (value) => {
-            if(isValidVersionFormat(value)){
-              return true;
-            }
-            return "Please enter a valid version format #.#.#";
-          }
-        },
-    ]
-    
-    return inquirer.prompt(question)
-    
-}
 
 module.exports = {
-    askConfigurationItem,
-    manageConfigurationItem
+  askConfigurationDetail,
+  askDependencies,
+  askToSelectOneDependencies,
+  askWhatTypeOfVersionWant
 }
-

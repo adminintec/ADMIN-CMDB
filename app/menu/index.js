@@ -1,27 +1,31 @@
-const menu = require("inquirer-menu");
+const menu = require('inquirer-menu');
 const chalk = require('chalk');
+const figlet = require('figlet');
 const clear = require('clear');
-const figlet = require("figlet");
 
+// TODO: Create manage menu
+const initialMenu = (fnCreate, fnUpgrade, fnDeprecate, fnListAll, fnListAllDependencies) => {
+  console.log(
+    chalk.yellow(
+      figlet.textSync('CMDB', { horizontalLayout: 'full' })
+    )
+  );
 
-// TODO: Create manage menu, ask for Upgrade and Deprecate 
-const initialMenu = (fnCreate, fnManage) => {
-  clear()
-  console.log(chalk.yellow(
-    figlet.textSync('CMDB', { horizontalLayout: 'full' })
-  ));
-    const objMenu =  {
-        message: 'What do you want to do?',
-        choices: {
-          Create: () => fnCreate,
-          Manage: () => fnManage
-        }
-      }
-      return menu(objMenu)
+  const objMenu = {
+    message: 'What you want to do?',
+    choices: {
+      Create: () => fnCreate,
+      UpgradeCI: () => fnUpgrade,
+      DeprecateCI: () => fnDeprecate,
+      ListAllCI: () => fnListAll,
+      ListAllDependencies: () => fnListAllDependencies
+    }
+  }
+  return menu(objMenu)
 }
-
 
 
 module.exports = {
-    initialMenu
+  initialMenu,
 }
+
