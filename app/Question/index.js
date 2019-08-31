@@ -68,7 +68,7 @@ const askDependencies = (data) => {
   return inquirer.prompt(questions);
 }
 
-const askToSelectOneDependencies = (data) => {
+const askToSelectOneDependencies = (data, strQuestion) => {
   const choicesDependencies = Object.values(data).map((dt, index) => {
     return `${index} ${dt.name}`
   })
@@ -77,7 +77,7 @@ const askToSelectOneDependencies = (data) => {
     {
       name: 'dependenciesSelected',
       type: 'list',
-      message: 'Select what dependencies you want to work with?',
+      message: strQuestion ||'Select what dependencies you want to work with?',
       choices: choicesDependencies,
 
     },

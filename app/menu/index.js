@@ -4,7 +4,7 @@ const figlet = require('figlet');
 const clear = require('clear');
 
 // TODO: Create manage menu
-const initialMenu = (fnCreate, fnUpgrade, fnDeprecate, fnListAll) => {
+const initialMenu = (fnCreate, fnUpgrade, fnDeprecate, fnListAll, fnListBy) => {
   console.log(
     chalk.yellow(
       figlet.textSync('CMDB', { horizontalLayout: 'full' })
@@ -17,6 +17,7 @@ const initialMenu = (fnCreate, fnUpgrade, fnDeprecate, fnListAll) => {
       Create: () => fnCreate,
       UpgradeCI: () => fnUpgrade,
       DeprecateCI: () => fnDeprecate,
+      ListDependenciesByCI: () => fnListBy,
       ListAllCI: () => fnListAll,
     }
   }
