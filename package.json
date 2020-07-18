@@ -11,7 +11,7 @@
     "figlet": "^1.2.3",
     "inquirer": "^6.5.1",
     "inquirer-menu": "^1.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "log-update": "^3.2.0",
     "read-data": "^1.1.0"
   }
